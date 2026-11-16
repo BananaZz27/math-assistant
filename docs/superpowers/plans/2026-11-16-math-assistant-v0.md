@@ -57,7 +57,7 @@ README.md
 
 ---
 
-### งานที่ 1: โครงโปรเจกต์ + เครื่องมือแก้สมการ
+### Task 1: โครงโปรเจกต์ + เครื่องมือแก้สมการ
 
 **ไฟล์:**
 - สร้าง: `pyproject.toml`, `src/assistant/__init__.py`, `src/assistant/errors.py`, `src/assistant/config.py`, `src/assistant/tools/__init__.py`, `src/assistant/tools/parse.py`, `src/assistant/tools/algebra.py`
@@ -128,7 +128,7 @@ def test_bad_input_raises_tool_error():
 
 ---
 
-### งานที่ 2: เครื่องมือสรุปไฟล์ CSV
+### Task 2: เครื่องมือสรุปไฟล์ CSV
 
 **ไฟล์:**
 - สร้าง: `src/assistant/tools/dataframe.py`
@@ -180,7 +180,7 @@ def test_missing_path_raises():
 
 ---
 
-### งานที่ 3: ทะเบียนเครื่องมือพร้อม timeout
+### Task 3: ทะเบียนเครื่องมือพร้อม timeout
 
 **ไฟล์:**
 - สร้าง: `src/assistant/tools/registry.py`
@@ -227,7 +227,7 @@ def test_timeout_stops_a_hanging_tool(monkeypatch):
 
 ---
 
-### งานที่ 4: อินเทอร์เฟซสมอง, FakeBrain, core.answer
+### Task 4: อินเทอร์เฟซสมอง, FakeBrain, core.answer
 
 **ไฟล์:**
 - สร้าง: `src/assistant/brain/__init__.py`, `src/assistant/brain/base.py`, `src/assistant/brain/fake.py`, `src/assistant/core.py`
@@ -275,7 +275,7 @@ def test_tool_error_becomes_plain_text_not_crash():
 
 ---
 
-### งานที่ 5: LocalBrain (Ollama)
+### Task 5: LocalBrain (Ollama)
 
 **ไฟล์:**
 - สร้าง: `src/assistant/brain/local.py`
@@ -324,7 +324,7 @@ def test_ollama_unreachable_is_friendly(monkeypatch):
 
 ---
 
-### งานที่ 6: CLI, สคริปต์ benchmark, README
+### Task 6: CLI, สคริปต์ benchmark, README
 
 **ไฟล์:**
 - สร้าง: `src/assistant/cli.py`, `scripts/benchmark_models.py`, `scripts/benchmark_questions.json`, `scripts/sample.csv`, `README.md`
