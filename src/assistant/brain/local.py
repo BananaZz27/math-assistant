@@ -71,7 +71,7 @@ class LocalBrain:
         if not isinstance(data, dict):
             raise ValueError("JSON is not an object")
         name, args = data.get("tool"), data.get("args", {})
-        if name not in allowed:
+        if not isinstance(name, str) or name not in allowed:
             raise ValueError(f"unknown tool {name!r}")
         if not isinstance(args, dict):
             raise ValueError("'args' must be an object")
@@ -90,5 +90,5 @@ class LocalBrain:
                 f"ติดต่อ Ollama ไม่ได้ ({self.host}) ลองเปิดโปรแกรม Ollama ก่อน / "
                 f"cannot reach Ollama at {self.host}"
             ) from exc
-        except (requests.RequestException, ValueError, KeyError) as exc:
+        except (requests.RequestException, ValueError, KeyError, TypeError) as exc:
             raise BrainError(f"Ollama ตอบกลับผิดปกติ / unexpected reply from Ollama: {exc}") from exc

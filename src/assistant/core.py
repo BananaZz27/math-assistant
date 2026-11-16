@@ -18,6 +18,24 @@ class Answer:
     call: ToolCall
     result: dict
     verified: bool | None  # None when the tool has nothing to verify (e.g. CSV summary)
+    facts: str = ""  # one line built from the tool result only, shown next to the brain's explanation
+
+
+def describe_result(call: ToolCall, result: dict) -> str:
+    """A deterministic summary of the tool result. No LLM involved, so it cannot misquote numbers."""
+    if call.name == "solve_equation":
+        variable = result.get("variable", "x")
+        if result.get("kind") == "none":
+            body = "ไม่มีคำตอบที่เป็นจำนวนจริง / no real solution"
+        elif result.get("kind") == "all":
+            body = f"จริงสำหรับทุกค่า {variable} / true for every real {variable}"
+        else:
+            body = f"{variable} = {', '.join(result.get('solutions', []))}"
+        status = "ตรวจแล้ว" if result.get("verified") else "ตรวจไม่ผ่าน"
+        return f"สมการ: {result.get('equation', '')} | คำตอบ: {body} ({status})"
+    if call.name == "summarize_csv":
+        return f"ไฟล์มี {result.get('rows')} แถว, {len(result.get('columns', []))} คอลัมน์"
+    return ""
 
 
 def answer(question: str, brain: Brain, tools: dict[str, ToolSpec] = TOOLS) -> Answer:
@@ -32,4 +50,4 @@ def answer(question: str, brain: Brain, tools: dict[str, ToolSpec] = TOOLS) -> A
     text = brain.explain(question, call, result)
     if verified is False:
         text = f"{UNVERIFIED_NOTICE}\n{text}"
-    return Answer(text=text, call=call, result=result, verified=verified)
+    return Answer(text=text, call=call, result=result, verified=verified, facts=describe_result(call, result))

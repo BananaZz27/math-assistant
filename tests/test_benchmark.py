@@ -33,3 +33,22 @@ def test_question_file_is_well_formed():
     questions = bench.load_questions()
     assert len(questions) == 10
     assert {q["expected_tool"] for q in questions} == {"solve_equation", "summarize_csv"}
+
+
+def test_score_counts_correct_solutions():
+    bench = load_script()
+    brain = FakeBrain(ToolCall("solve_equation", {"text": "x**2=9"}), "ok")
+    questions = [
+        {"question": "q1", "expected_tool": "solve_equation", "expected_solutions": ["-3", "3"]},
+        {"question": "q2", "expected_tool": "solve_equation", "expected_solutions": ["1"]},
+        {"question": "q3", "expected_tool": "summarize_csv", "expected_solutions": None},
+    ]
+    score = bench.score_brain(brain, questions)
+    assert score["solutions_total"] == 2 and score["solutions_correct"] == 1
+
+
+def test_every_algebra_question_has_expected_solutions():
+    bench = load_script()
+    for q in bench.load_questions():
+        if q["expected_tool"] == "solve_equation":
+            assert isinstance(q["expected_solutions"], list)

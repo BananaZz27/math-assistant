@@ -18,7 +18,8 @@ def test_unverified_result_gets_notice(monkeypatch):
     assert a.verified is False and a.text.startswith(UNVERIFIED_NOTICE)
 
 
-def test_csv_result_has_no_verified_flag(tmp_path):
+def test_csv_result_has_no_verified_flag(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     p = tmp_path / "a.csv"
     p.write_text("v\n1\n", encoding="utf-8")
     a = answer("สรุป", FakeBrain(ToolCall("summarize_csv", {"path": str(p)}), "ok"))
@@ -31,3 +32,15 @@ def test_tool_error_becomes_plain_text_not_crash():
     assert "ToolError" not in a.text and a.verified is False
     assert a.result == {}
     assert brain.explain_calls == []
+
+
+def test_facts_line_comes_from_tool_result_not_brain():
+    brain = FakeBrain(ToolCall("solve_equation", {"text": "x² − 5x + 6 = 0"}), "คำตอบคือ 99")
+    a = answer("q", brain)
+    assert "x = 2, 3" in a.facts and "99" not in a.facts
+
+
+def test_facts_for_no_solution_and_all_reals():
+    none = answer("q", FakeBrain(ToolCall("solve_equation", {"text": "x + 1 = x + 2"}), "e"))
+    allr = answer("q", FakeBrain(ToolCall("solve_equation", {"text": "x + 1 = x + 1"}), "e"))
+    assert "ไม่มีคำตอบ" in none.facts and "ทุกค่า" in allr.facts

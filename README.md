@@ -12,7 +12,7 @@ A command-line assistant: real code does the math, a local LLM only plans and ex
 ```bash
 python -m venv .venv
 # Windows: .venv\Scripts\activate     Linux/macOS: source .venv/bin/activate
-pip install -e .[dev]
+pip install -e ".[dev]"
 ```
 
 ติดตั้ง [Ollama](https://ollama.com) แล้วดึงโมเดล (pull) มาเก็บในเครื่อง / install Ollama and pull a model:
@@ -35,6 +35,12 @@ python -m assistant.cli "Solve x^2 = 9" --model qwen2.5:7b
 ถ้าเปิด Ollama ไม่ได้ จะขึ้นข้อความภาษาไทย/อังกฤษบอกให้เปิดโปรแกรมก่อน และโปรแกรมจบด้วย exit code 1
 (exit code 1 also means the answer could not be verified).
 
+## ไฟล์ CSV: ข้อจำกัดด้านความปลอดภัย / CSV safety rules
+
+เครื่องมืออ่านได้เฉพาะไฟล์ในเครื่อง **ภายในโฟลเดอร์ที่รันโปรแกรม** (หรือโฟลเดอร์ที่กำหนดด้วยตัวแปร `ASSISTANT_DATA_DIR`)
+และไม่รับ URL เพราะชื่อไฟล์อาจมาจากโมเดล รองรับ UTF-8 และ cp874 (CSV จาก Excel บน Windows ภาษาไทย)
+(only local files inside the working folder or `ASSISTANT_DATA_DIR`; no URLs; UTF-8 and cp874 supported).
+
 ## ทดสอบ / Tests
 
 ```bash
@@ -51,7 +57,7 @@ pytest
 python scripts/benchmark_models.py qwen2.5:7b llama3.1:8b
 ```
 
-จะแสดงต่อโมเดล: เลือกเครื่องมือถูกกี่ข้อ, ตรวจคำตอบผ่านกี่ข้อ, เวลาเฉลี่ยต่อข้อ
+จะแสดงต่อโมเดล: เลือกเครื่องมือถูกกี่ข้อ, ตรวจคำตอบผ่านกี่ข้อ, **ได้คำตอบตรงกับเฉลยกี่ข้อ** (สำคัญที่สุด เพราะจับกรณีที่โมเดลคัดลอกสมการผิด), เวลาเฉลี่ยต่อข้อ
 เลือกตัวที่ดีที่สุดแล้วแก้ `DEFAULT_MODEL` ใน `src/assistant/config.py`
 (pick the best model and set `DEFAULT_MODEL` in `src/assistant/config.py`).
 

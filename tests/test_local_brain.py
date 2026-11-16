@@ -77,3 +77,20 @@ def test_plan_rejects_args_that_are_not_an_object(monkeypatch):
     patch_post(monkeypatch, [bad, bad])
     with pytest.raises(BrainError):
         LocalBrain().plan("q", list(TOOLS.values()))
+
+
+def test_plan_rejects_tool_that_is_not_a_string(monkeypatch):
+    bad = '{"tool": ["solve_equation"], "args": {}}'
+    patch_post(monkeypatch, [bad, bad])
+    with pytest.raises(BrainError):
+        LocalBrain().plan("q", list(TOOLS.values()))
+
+
+def test_reply_with_null_message_is_a_brain_error(monkeypatch):
+    class NullMessage(FakeResponse):
+        def json(self):
+            return {"message": None}
+
+    monkeypatch.setattr(requests, "post", lambda *a, **k: NullMessage(""))
+    with pytest.raises(BrainError):
+        LocalBrain().explain("q", ToolCall("solve_equation", {}), {})

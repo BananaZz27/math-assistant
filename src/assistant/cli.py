@@ -29,6 +29,9 @@ def main(argv: list[str] | None = None, brain: Brain | None = None) -> int:
         print(str(exc), file=sys.stderr)
         return 1
 
+    if result.facts:
+        print(result.facts)
+        print()
     print(result.text)
     return 1 if result.verified is False else 0
 

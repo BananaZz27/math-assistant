@@ -25,7 +25,8 @@ def test_bad_arguments():
         run_tool("solve_equation", {"wrong": 1})
 
 
-def test_tool_error_message_is_preserved(tmp_path):
+def test_tool_error_message_is_preserved(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     empty = tmp_path / "e.csv"
     empty.write_text("", encoding="utf-8")
     with pytest.raises(ToolError, match="empty"):

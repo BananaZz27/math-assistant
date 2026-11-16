@@ -35,3 +35,10 @@ def test_cli_tool_failure_exits_with_1(capsys):
     brain = FakeBrain(ToolCall("solve_equation", {"text": "(((("}), "unused")
     assert main(["q"], brain=brain) == 1
     assert capsys.readouterr().out.strip() != ""
+
+
+def test_cli_prints_tool_facts_even_if_brain_explanation_is_wrong(capsys):
+    brain = FakeBrain(ToolCall("solve_equation", {"text": "x² − 5x + 6 = 0"}), "คำตอบคือ 99")
+    assert main(["q"], brain=brain) == 0
+    out = capsys.readouterr().out
+    assert "x = 2, 3" in out and "คำตอบคือ 99" in out
