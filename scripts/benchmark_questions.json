@@ -1,0 +1,12 @@
+[
+  {"question": "แก้สมการ x² − 5x + 6 = 0", "expected_tool": "solve_equation"},
+  {"question": "ช่วยหาค่า x จาก 2x + 4 = 0", "expected_tool": "solve_equation"},
+  {"question": "สมการ x^2 = 9 ได้คำตอบอะไรบ้าง", "expected_tool": "solve_equation"},
+  {"question": "Solve x^2 - 7x + 10 = 0", "expected_tool": "solve_equation"},
+  {"question": "What are the solutions of 3x - 12 = 0?", "expected_tool": "solve_equation"},
+  {"question": "หาคำตอบของ x² − 4 = 0 ให้หน่อย", "expected_tool": "solve_equation"},
+  {"question": "แก้ 2x² − 8x + 6 = 0 และอธิบายด้วย", "expected_tool": "solve_equation"},
+  {"question": "x**2 + 1 = 0 มีคำตอบที่เป็นจำนวนจริงไหม", "expected_tool": "solve_equation"},
+  {"question": "สรุปข้อมูลในไฟล์ scripts/sample.csv ให้หน่อย", "expected_tool": "summarize_csv"},
+  {"question": "Summarize the file scripts/sample.csv", "expected_tool": "summarize_csv"}
+]
